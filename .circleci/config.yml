@@ -23,7 +23,7 @@ jobs:
       - run:
           name: "Build docker image and push to dkcoer hub"
           command: |
-            if[ "${CIRCLE_BRANCH}" == "master" ]; then
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
               docker build -t ohmliveza/dockerproject:latest .
               docker build -t ohmliveza/dockerproject:${CIRCLE_SHA1} .
               docker push ohmliveza/dockerproject:latest
