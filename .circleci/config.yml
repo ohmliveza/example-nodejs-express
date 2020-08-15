@@ -24,7 +24,6 @@ jobs:
           name: "Build docker image and push to dkcoer hub"
           command: |
             if[ "${CIRCLE_BRANCH}" == "master" ]; then
-              cp Dockerfile.production Dockerfile
               docker build -t ohmliveza/dockerproject:latest .
               docker build -t ohmliveza/dockerproject:${CIRCLE_SHA1} .
               docker push ohmliveza/dockerproject:latest
