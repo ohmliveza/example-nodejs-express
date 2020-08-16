@@ -12,7 +12,7 @@ jobs:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run: npm install
+      - run: npm install elastic-apm-node@~1.14 --save
       - save_cache:
           paths:
             - node_modules
@@ -24,13 +24,13 @@ jobs:
           name: "Build docker image and push to dkcoer hub"
           command: |
             if [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker build -t ohmliveza/dockerproject:latest .
+              docker build -t ohmliveza/dockerproject:v2 .
               docker build -t ohmliveza/dockerproject:${CIRCLE_SHA1} .
-              docker push ohmliveza/dockerproject:latest
+              docker push ohmliveza/dockerproject:v2
               docker push ohmliveza/dockerproject:${CIRCLE_SHA1}
             elif [ "${CIRCLE_BRANCH}" == "master" ]; then
-              docker build -t ohmliveza/dockerproject:latest .
-              docker push ohmliveza/dockerproject:latest
+              docker build -t ohmliveza/dockerproject:v2 .
+              docker push ohmliveza/dockerproject:v2
             else
               echo "This is ${CIRCLE_BRANCH}"
             fi
@@ -42,7 +42,7 @@ jobs:
               -e CATTLE_SECRET_KEY="$CATTLE_SECRET_KEY" \
               -e CATTLE_URL="$CATTLE_URL" \
               etlweather/gaucho upgrade $RANCHER_EXAMPLE_NODEJS \
-              --imageUuid 'docker:ohmliveza/dockerproject:latest' \
+              --imageUuid 'docker:ohmliveza/dockerproject:v2' \
               --batch_size 3 --start_first \
               --auto_complete --timeout 600\
               /
